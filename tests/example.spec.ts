@@ -21,7 +21,7 @@ test('Search for a product', async ({ page }) => {
   await expect(page.locator('.productinfo')).toContainText('Blue Top');
 });
 
-test('User login with invalid credentials', async ({ page }) => {
+test('User login with invalid credentials - Case1', async ({ page }) => {
   await page.click('a[href="/login"]');
   await page.fill('input[data-qa="login-email"]', 'invalid@example.com');
   await page.fill('input[data-qa="login-password"]', 'wrongpassword');
@@ -29,11 +29,11 @@ test('User login with invalid credentials', async ({ page }) => {
   await expect(page.locator('.login-form p')).toHaveText('Your email or password is incorrect!');
 });
 
-  test('Successful user registration', async ({ page }) => {
-    await page.click('a[href="/login"]');
-    await page.fill('input[data-qa="signup-name"]', 'Test User');
-    await page.fill('input[data-qa="signup-email"]', `test${Date.now()}@example.com`);
-    await page.click('button[data-qa="signup-button"]');
-    await expect(page.locator('b').filter({ hasText: 'Enter Account Information' })).toBeVisible();
+test('Successful user registration', async ({ page }) => {
+  await page.click('a[href="/login"]');
+  await page.fill('input[data-qa="signup-name"]', 'Test User');
+  await page.fill('input[data-qa="signup-email"]', `test${Date.now()}@example.com`);
+  await page.click('button[data-qa="signup-button"]');
+  await expect(page.locator('b').filter({ hasText: 'Enter Account Information' })).toBeVisible();
 
-  });
+});
