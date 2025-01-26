@@ -1,1 +1,1 @@
-# AutmationExercisePlayWright
+# AutomationExercisePlayWright
