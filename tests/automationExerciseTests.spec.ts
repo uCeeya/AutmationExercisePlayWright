@@ -62,7 +62,6 @@ test('Successful User Registration', async ({ page }) => {
 
 
 test('Successful User Registration with Faker data', async ({ page }) => {
-  //await page.goto('https://automationexercise.com/login');
 
   // Generate fake data
   const name = faker.person.firstName();
@@ -83,8 +82,6 @@ test('Successful User Registration with Faker data', async ({ page }) => {
   await page.fill('[data-qa="signup-name"]', name);
   await page.fill('[data-qa="signup-email"]', email);
   await page.click('button[data-qa="signup-button"]');
-
-  //await page.click('button[data-qa="signup-button"]', { timeout: 50000 });
   await page.locator('#id_gender1').click();
   await expect(page.locator('#id_gender1')).toBeChecked();
   await page.fill('input[data-qa="password"]', 'Fresh1234$');
