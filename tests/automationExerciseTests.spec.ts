@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+import { faker } from '@faker-js/faker';
+
 // This launches the browser and navigates to the homepage before each test
 test.beforeEach(async ({ page }) => {
   await page.goto('https://automationexercise.com/');
@@ -58,4 +60,48 @@ test('Successful User Registration', async ({ page }) => {
   await expect(page.locator('b').filter({ hasText: 'Account Created' })).toBeVisible();
 });
 
+
+test('Successful User Registration with Faker data', async ({ page }) => {
+  //await page.goto('https://automationexercise.com/login');
+
+  // Generate fake data
+  const name = faker.person.firstName();
+  const last_name = faker.person.lastName();
+  const email = faker.internet.email();
+  const country = faker.location.country();
+  const address = faker.location.streetAddress();
+  const city = faker.location.city();
+  const state = faker.location.state();
+  const zipCode = faker.location.zipCode();
+  const phone = faker.phone.number();
+  const day = faker.date.between({ from: '1980-01-01T00:00:00.000Z', to: '2007-01-01T00:00:00.000Z' });
+  const month = faker.date.month();
+  const year = faker.date.past().getFullYear();
+
+  // Fill the signup form
+  await page.click('a[href="/login"]');
+  await page.fill('[data-qa="signup-name"]', name);
+  await page.fill('[data-qa="signup-email"]', email);
+  await page.click('button[data-qa="signup-button"]');
+
+  //await page.click('button[data-qa="signup-button"]', { timeout: 50000 });
+  await page.locator('#id_gender1').click();
+  await expect(page.locator('#id_gender1')).toBeChecked();
+  await page.fill('input[data-qa="password"]', 'Fresh1234$');
+  await page.selectOption('#days', day.getDate().toString());
+  await page.selectOption('#months', month);
+  await page.selectOption('#years', '2003');
+  await page.fill('input[data-qa="first_name"]', name);
+  await page.fill('input[data-qa="last_name"]', last_name);
+  await page.fill('input[data-qa="address"]', address);
+  await page.selectOption('#country', 'Israel');
+  await page.fill('input[data-qa="state"]', state);
+  await page.fill('input[data-qa="city"]', city);
+  await page.fill('input[data-qa="zipcode"]', zipCode);
+  await page.fill('input[data-qa="mobile_number"]', phone);
+  await page.click('button[data-qa="create-account"]');
+  await expect(page.locator('b').filter({ hasText: 'Account Created' })).toBeVisible();
+
+  console.log(`Signing up with: ${name}, ${email}`);
+});
 
