@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-
+import * as fs from 'fs';
 import { faker } from '@faker-js/faker';
 
 // This launches the browser and navigates to the homepage before each test
@@ -99,6 +99,25 @@ test('Successful User Registration with Faker data', async ({ page }) => {
   await page.click('button[data-qa="create-account"]');
   await expect(page.locator('b').filter({ hasText: 'Account Created' })).toBeVisible();
 
+  fs.writeFileSync('test-data.json', JSON.stringify({ email }), 'utf-8');
   console.log(`Signing up with: ${name}, ${email}`);
+  
+});
+
+// This test verifies that the user is able to login with valid credentials
+
+test('User login with valid credentials', async ({ page }) => {
+  const data = JSON.parse(fs.readFileSync('test-data.json', 'utf-8'));
+  const storedEmail = data.email;
+
+  console.log(`Logging in with: ${storedEmail}`);
+  await page.click('a[href="/login"]');
+  await page.fill('input[data-qa="login-email"]', storedEmail);
+  await page.fill('input[data-qa="login-password"]', 'Fresh1234$');
+  await page.click('button[data-qa="login-button"]');
+  await expect(page.locator('a[href="/logout"]')).toBeVisible();
+
+  await page.click('a[href="/delete_account"]');
+  await expect(page.locator('b').filter({ hasText: 'Account Deleted' })).toBeVisible();
 });
 
