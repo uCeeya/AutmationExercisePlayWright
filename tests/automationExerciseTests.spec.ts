@@ -105,7 +105,6 @@ test('Successful User Registration with Faker data', async ({ page }) => {
 });
 
 // This test verifies that the user is able to login with valid credentials
-
 test('User login with valid credentials', async ({ page }) => {
   const data = JSON.parse(fs.readFileSync('test-data.json', 'utf-8'));
   const storedEmail = data.email;
